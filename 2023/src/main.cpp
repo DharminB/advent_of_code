@@ -14,6 +14,7 @@
 #include <aoc_solution_7.hpp>
 #include <aoc_solution_8.hpp>
 #include <aoc_solution_9.hpp>
+#include <aoc_solution_10.hpp>
 
 int main(int argc, char *argv[])
 {
@@ -40,7 +41,8 @@ int main(int argc, char *argv[])
     // size_t answer = aoc_2023_6(input_lines, true);
     // size_t answer = aoc_2023_7(input_lines, false);
     // size_t answer = aoc_2023_8(input_lines, false);
-    size_t answer = aoc_2023_9(input_lines, false);
+    // size_t answer = aoc_2023_9(input_lines, false);
+    size_t answer = aoc_2023_10(input_lines, true);
     std::cout << "answer: " << answer << std::endl;
 
     return 0;
