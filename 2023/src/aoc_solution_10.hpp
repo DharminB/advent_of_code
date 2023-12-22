@@ -102,7 +102,185 @@ size_t aoc_2023_10(const std::vector<std::string>& input_lines, bool is_part_1)
 
     }
 
+    if ( is_part_1 )
+    {
+        return loop_length / 2;
+    }
 
-    return loop_length / 2;
+    /* part 2 */
+
+    /* mask closed with input lines */
+    std::vector<std::string> clean_loop(input_lines);
+    for ( size_t i = 0; i < input_lines.size(); i++ )
+    {
+        for ( size_t j = 0; j < input_lines[i].size(); j++ )
+        {
+            if ( !closed[i][j] )
+            {
+                clean_loop[i][j] = '.';
+            }
+        }
+    }
+
+    /* replace 'S' with pipe symbol */
+    // bool found_valid_neighbour = false;
+    std::vector<int> neighbour_rows, neighbour_cols;
+    for ( size_t i = 0; i < neighbour_row_offset.size(); i++ )
+    {
+        const char curr = input_lines[start_row][start_col];
+        int new_row = start_row + neighbour_row_offset[i];
+        int new_col = start_col + neighbour_col_offset[i];
+        if ( new_row < 0 || new_row >= num_rows ||
+             new_col < 0 || new_col >= num_cols ) // boundaries
+        {
+            continue;
+        }
+        size_t current_itr = valid_current_symbol[i].find(curr);
+        if ( current_itr == std::string::npos ) // cannot travel in that direction
+        {
+            continue;
+        }
+
+        const char neighbour = input_lines[new_row][new_col];
+        size_t neighbour_itr = valid_neighbour_symbol[i].find(neighbour);
+        if ( neighbour_itr == std::string::npos ) // cannot travel in that direction
+        {
+            continue;
+        }
+
+        /* found a valid neighbour */
+        // std::cout << "neighbour: " << new_row << " " << new_col << " " << neighbour << std::endl;
+        neighbour_rows.push_back(new_row);
+        neighbour_cols.push_back(new_col);
+    }
+
+    std::cout << neighbour_rows.front() << " " << neighbour_cols.front() << std::endl;
+    std::cout << neighbour_rows.back() << " " << neighbour_cols.back() << std::endl;
+
+    if ( neighbour_rows.front() == start_row - 1 &&
+         neighbour_rows.back() == start_row + 1 &&
+         neighbour_cols.front() == start_col &&
+         neighbour_cols.back() == start_col ) // |
+    {
+        clean_loop[start_row][start_col] = '|';
+    }
+    else if ( neighbour_rows.front() == start_row &&
+              neighbour_rows.back() == start_row &&
+              neighbour_cols.front() == start_col - 1 &&
+              neighbour_cols.back() == start_col + 1 ) // -
+    {
+        clean_loop[start_row][start_col] = '-';
+    }
+    else if ( neighbour_rows.front() == start_row - 1 &&
+              neighbour_rows.back() == start_row &&
+              neighbour_cols.front() == start_col &&
+              neighbour_cols.back() == start_col + 1 ) // L
+    {
+        clean_loop[start_row][start_col] = 'L';
+    }
+    else if ( neighbour_rows.front() == start_row &&
+              neighbour_rows.back() == start_row + 1 &&
+              neighbour_cols.front() == start_col - 1 &&
+              neighbour_cols.back() == start_col ) // 7
+    {
+        clean_loop[start_row][start_col] = '7';
+    }
+    else if ( neighbour_rows.front() == start_row - 1 &&
+              neighbour_rows.back() == start_row &&
+              neighbour_cols.front() == start_col &&
+              neighbour_cols.back() == start_col - 1 ) // J
+    {
+        clean_loop[start_row][start_col] = 'J';
+    }
+    else if ( neighbour_rows.front() == start_row &&
+              neighbour_rows.back() == start_row + 1 &&
+              neighbour_cols.front() == start_col + 1 &&
+              neighbour_cols.back() == start_col ) // F
+    {
+        clean_loop[start_row][start_col] = 'F';
+    }
+
+    /* print clean loop */
+    // for ( size_t i = 0; i < clean_loop.size(); i++ )
+    // {
+    //     std::cout << clean_loop[i] << std::endl;
+    // }
+
+
+    size_t loop_area = 0;
+    for ( size_t i = 0; i < clean_loop.size(); i++ )
+    {
+        for ( size_t j = 0; j < clean_loop[i].size(); j++ )
+        {
+            if ( clean_loop[i][j] != '.' )
+            {
+                continue;
+            }
+
+            // std::cout << i << " " << j << " " << clean_loop[i][j] << " -> ";
+            /* ray casting to the right/east */
+            char prev_corner = '.';
+            size_t counter = 0;
+            for ( size_t k = j+1; k < clean_loop[i].size(); k++ )
+            {
+                // std::cout << clean_loop[i][k] << " ";
+                if ( clean_loop[i][k] == '|' )
+                {
+                    counter ++;
+                }
+                else if ( clean_loop[i][k] == '-' ||
+                          clean_loop[i][k] == '.' )
+                {
+                    // no increase in counter
+                }
+                else // corner char (L, F, 7, J)
+                {
+                    if ( prev_corner == '.' ) // no prev corner
+                    {
+                        prev_corner = clean_loop[i][k];
+                    }
+                    else
+                    {
+                        const char curr_corner = clean_loop[i][k];
+                        if ( prev_corner == 'L' && curr_corner == '7' )
+                        {
+                            counter += 1;
+                        }
+                        else if ( prev_corner == 'L' && curr_corner == 'J' )
+                        {
+                            counter += 2;
+                        }
+                        else if ( prev_corner == 'F' && curr_corner == 'J' )
+                        {
+                            counter += 1;
+                        }
+                        else if ( prev_corner == 'F' && curr_corner == '7' )
+                        {
+                            counter += 2;
+                        }
+                        prev_corner = '.'; // reset prev_corner
+                    }
+                }
+            }
+            // std::cout << counter << std::endl;
+            if ( counter % 2 == 0 )
+            {
+                clean_loop[i][j] = 'O';
+            }
+            else
+            {
+                clean_loop[i][j] = 'I';
+                loop_area ++;
+            }
+        }
+    }
+
+    /* print clean loop */
+    for ( size_t i = 0; i < clean_loop.size(); i++ )
+    {
+        std::cout << clean_loop[i] << std::endl;
+    }
+
+    return loop_area;
 }
 

@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
     // size_t answer = aoc_2023_7(input_lines, false);
     // size_t answer = aoc_2023_8(input_lines, false);
     // size_t answer = aoc_2023_9(input_lines, false);
-    size_t answer = aoc_2023_10(input_lines, true);
+    size_t answer = aoc_2023_10(input_lines, false);
     std::cout << "answer: " << answer << std::endl;
 
     return 0;
