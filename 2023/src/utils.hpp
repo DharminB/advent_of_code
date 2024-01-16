@@ -162,3 +162,18 @@ bool parse_red_green_blue(const std::string& line, int& red, int& green, int& bl
     }
     return true;
 }
+
+template <typename T>
+void printVec(const std::vector<T>& vec)
+{
+    std::cout << "[";
+    for ( size_t i = 0; i < vec.size(); i++ )
+    {
+        if ( i > 0 )
+        {
+            std::cout << ", ";
+        }
+        std::cout << vec[i];
+    }
+    std::cout << "]";
+}
