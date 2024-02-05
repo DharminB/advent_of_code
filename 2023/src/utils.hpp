@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <sstream>
 #include <fstream>
 #include <string>
 #include <vector>
@@ -164,16 +165,63 @@ bool parse_red_green_blue(const std::string& line, int& red, int& green, int& bl
 }
 
 template <typename T>
-void printVec(const std::vector<T>& vec)
+std::string printVec(const std::vector<T>& vec)
 {
-    std::cout << "[";
+    std::stringstream ss;
+    ss << "[";
     for ( size_t i = 0; i < vec.size(); i++ )
     {
         if ( i > 0 )
         {
-            std::cout << ", ";
+            ss << ", ";
         }
-        std::cout << vec[i];
+        ss << vec[i];
     }
-    std::cout << "]";
+    ss << "]";
+    return ss.str();
 }
+
+size_t factorial(size_t n)
+{
+    size_t prod = 1;
+    for ( size_t i = 2; i <= n; i++ )
+    {
+        prod *= i;
+    }
+    return prod;
+}
+
+size_t combination(size_t n, size_t r)
+{
+    return factorial(n) / (factorial(n-r) * factorial(r));
+}
+
+std::vector<std::vector<bool>> generate_combinations(unsigned int n, unsigned int r)
+{
+    std::vector<std::vector<bool>> combinations;
+    for ( size_t i = 0; i <= n-r; i++ )
+    {
+        std::vector<bool> combination(n, false);
+        combination[i] = true;
+        if ( r > 1 )
+        {
+            std::vector<std::vector<bool>> small_combinations = generate_combinations(n-i-1, r-1);
+            const size_t scsize = small_combinations.front().size();
+            for ( size_t j = 0; j < small_combinations.size(); j++ )
+            {
+                std::vector<bool> c(combination);
+                for ( size_t k = 0; k < scsize; k++ )
+                {
+                    c[n-scsize+k] = small_combinations[j][k];
+                }
+                combinations.push_back(c);
+            }
+        }
+        else
+        {
+            combinations.push_back(combination);
+        }
+    }
+    return combinations;
+}
+
