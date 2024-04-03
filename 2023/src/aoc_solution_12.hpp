@@ -48,8 +48,33 @@ size_t aoc_2023_12(const std::vector<std::string>& input_lines, bool is_part_1)
     {
         std::cout << input_lines[i] << std::endl;
         std::vector<std::string> strs = split(input_lines[i], " ");
-        spring_strs.push_back(strs.front());
-        std::vector<std::string> nums = split(strs.back(), ",");
+        if ( is_part_1 )
+        {
+            spring_strs.push_back(strs.front());
+        }
+        else
+        {
+            std::string spring_str = strs.front();
+            for ( size_t j = 0; j < 4; j++ )
+            {
+                spring_str += "?" + strs.front();
+            }
+            spring_strs.push_back(spring_str);
+        }
+        std::string contiguous_spring_str;
+        if ( is_part_1 )
+        {
+            contiguous_spring_str = strs.back();
+        }
+        else
+        {
+            contiguous_spring_str = strs.back();
+            for ( size_t j = 0; j < 4; j++ )
+            {
+                contiguous_spring_str += "," + strs.back();
+            }
+        }
+        std::vector<std::string> nums = split(contiguous_spring_str, ",");
         std::vector<int> contiguous_spring(nums.size());
         for ( size_t j = 0; j < nums.size(); j++ )
         {
