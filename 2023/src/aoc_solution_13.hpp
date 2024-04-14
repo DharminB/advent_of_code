@@ -12,15 +12,6 @@
 
 #include <utils.hpp>
 
-void print_pattern(const std::vector<std::string>& pattern)
-{
-    for ( size_t i = 0; i < pattern.size(); i++ )
-    {
-        std::cout << pattern[i] << std::endl;
-    }
-    std::cout << std::endl;
-}
-
 std::vector<std::string> transpose(const std::vector<std::string>& pattern)
 {
     /* transpose pattern */
@@ -137,7 +128,7 @@ size_t aoc_2023_13(const std::vector<std::string>& input_lines, bool is_part_1)
     {
         const std::vector<std::string>& pattern = patterns[p];
         std::cout << "pattern " << p << std::endl;
-        // print_pattern(pattern);
+        // print_string_vec(pattern);
 
         int horizontal_mirror_pos = find_horizontal_mirror(pattern, allowed_num_of_mismatch);
         std::cout << "horizontal_mirror_pos: " << horizontal_mirror_pos << std::endl;
@@ -145,7 +136,7 @@ size_t aoc_2023_13(const std::vector<std::string>& input_lines, bool is_part_1)
         if ( horizontal_mirror_pos < 0 )
         {
             std::vector<std::string> pattern_T = transpose(pattern);
-            // print_pattern(pattern_T);
+            // print_string_vec(pattern_T);
 
             int vertical_mirror_pos = find_horizontal_mirror(pattern_T, allowed_num_of_mismatch);
             std::cout << "vertical_mirror_pos: " << vertical_mirror_pos << std::endl;
@@ -153,7 +144,7 @@ size_t aoc_2023_13(const std::vector<std::string>& input_lines, bool is_part_1)
             if ( vertical_mirror_pos < 0 )
             {
                 std::cout << "ERROR: neither horizontal nor vertical mirror found in pattern " << p << std::endl;
-                print_pattern(pattern);
+                print_string_vec(pattern);
                 return 0;
                 // continue;
             }

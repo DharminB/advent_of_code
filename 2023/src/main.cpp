@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <cctype>
+#include <chrono>
 
 #include <utils.hpp>
 #include <aoc_solution_1.hpp>
@@ -18,6 +19,7 @@
 #include <aoc_solution_11.hpp>
 #include <aoc_solution_12.hpp>
 #include <aoc_solution_13.hpp>
+#include <aoc_solution_14.hpp>
 
 int main(int argc, char *argv[])
 {
@@ -36,6 +38,8 @@ int main(int argc, char *argv[])
         return -1;
     }
 
+    std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
+
     // size_t answer = aoc_2023_1(input_lines, true);
     // size_t answer = aoc_2023_2(input_lines, true);
     // size_t answer = aoc_2023_3(input_lines, true);
@@ -48,8 +52,12 @@ int main(int argc, char *argv[])
     // size_t answer = aoc_2023_10(input_lines, false);
     // size_t answer = aoc_2023_11(input_lines, false);
     // size_t answer = aoc_2023_12(input_lines, false);
-    size_t answer = aoc_2023_13(input_lines, false);
+    // size_t answer = aoc_2023_13(input_lines, false);
+    size_t answer = aoc_2023_14(input_lines, true);
     std::cout << "answer: " << answer << std::endl;
+
+    std::chrono::duration<float> time_taken = std::chrono::steady_clock::now() - start;
+    std::cout << "time taken: " << time_taken.count()*1000.0f << " ms" << std::endl;
 
     return 0;
 }

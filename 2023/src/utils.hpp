@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <iomanip>
 #include <sstream>
 #include <fstream>
 #include <string>
@@ -165,7 +166,7 @@ bool parse_red_green_blue(const std::string& line, int& red, int& green, int& bl
 }
 
 template <typename T>
-std::string printVec(const std::vector<T>& vec)
+std::string print_vec(const std::vector<T>& vec)
 {
     std::stringstream ss;
     ss << "[";
@@ -179,6 +180,15 @@ std::string printVec(const std::vector<T>& vec)
     }
     ss << "]";
     return ss.str();
+}
+
+void print_string_vec(const std::vector<std::string>& string_vec)
+{
+    for ( size_t i = 0; i < string_vec.size(); i++ )
+    {
+        std::cout << std::setfill('0') << std::setw(2) << i << " " << string_vec[i] << std::endl;
+    }
+    std::cout << std::endl;
 }
 
 size_t factorial(size_t n)
